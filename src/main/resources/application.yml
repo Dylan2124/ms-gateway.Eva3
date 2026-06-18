@@ -1,0 +1,73 @@
+spring:
+  application:
+    name: ms-gateway
+  cloud:
+    gateway:
+      # Configuración de CORS
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"      # Frontend React
+              - "http://localhost:4200"      # Frontend Angular
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allow-credentials: true
+            max-age: 3600
+      # Configuración de rutas de los microservicios
+      routes:
+        - id: 1.-usuarios                 # Nombre único
+          uri: lb://ms-usuarios           # Destino dinámico (Eureka)
+          predicates:
+            - Path=/api/usuario          # Ruta de controllers del microservicio
+          filters:
+            - StripPrefix=0                   # Opcional: elimina prefijos
+
+        - id: 2.-catalogos
+          uri: lb://MS-CLIENTES
+          predicates:
+            - Path=/api/clientes/**
+
+        - id: 3.-productos
+          uri: lb://MS-PRODUCTOS
+          predicates:
+            - Path=/api/productos/**
+
+        - id: 4.-Carritos
+          uri: lb://MS-PRODUCTOS
+          predicates:
+            - Path=/api/productos/**
+
+        - id: 5-pedidos
+          uri: lb://MS-PEDIDOS
+          predicates:
+            - Path=/api/pedidos/**
+
+        - id: 6-productos
+          uri: lb://MS-PRODUCTOS
+          predicates:
+            - Path=/api/productos/**
+
+      # ... repite para tus 10 microservicios
+
+      default-filters:
+        - StripPrefix=1
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
+server:
+  port: 8080
+
