@@ -21,38 +21,57 @@ spring:
             max-age: 3600
       # Configuración de rutas de los microservicios
       routes:
-        - id: 1.-usuarios                 # Nombre único
+        - id: ms-usuarios-route            # Nombre único 1
           uri: lb://ms-usuarios           # Destino dinámico (Eureka)
           predicates:
             - Path=/api/usuario          # Ruta de controllers del microservicio
-          filters:
-            - StripPrefix=0                   # Opcional: elimina prefijos
 
-        - id: 2.-catalogos
-          uri: lb://MS-CLIENTES
+        - id: ms-catalogo-route           #2
+          uri: lb://ms-catalogo
           predicates:
-            - Path=/api/clientes/**
+            - Path=/api/producto
 
-        - id: 3.-productos
-          uri: lb://MS-PRODUCTOS
+        - id: ms-inventario-route         #3
+          uri: lb://ms-inventario
           predicates:
-            - Path=/api/productos/**
+            - Path=/api/movimientos
+            - Path=/api/stock
 
-        - id: 4.-Carritos
-          uri: lb://MS-PRODUCTOS
+        - id: ms-carrito-route            #4
+          uri: lb://ms-carrito
           predicates:
-            - Path=/api/productos/**
+            - Path=/api/carrito
 
-        - id: 5-pedidos
-          uri: lb://MS-PEDIDOS
+        - id: ms-compatibilidad-route      #5
+          uri: lb://ms-compatibilidad
           predicates:
-            - Path=/api/pedidos/**
+            - Path=/api/compatibilidad
 
-        - id: 6-productos
-          uri: lb://MS-PRODUCTOS
+        - id: ms-pedidos-route             #6
+          uri: lb://ms-pedidos
           predicates:
-            - Path=/api/productos/**
+            - Path=/api/pedidos
 
+        - id: ms-ensamblaje-route          #7
+          uri: lb://ms-ensamblaje
+          predicates:
+            - Path=/api/ensamblajes
+            - Path=/api/fases
+
+        - id: ms-pagos-route              #8
+          uri: lb://ms-pagos
+          predicates:
+            - Path=/api/pagos
+
+        - id: ms-despacho-route           #9
+          uri: lb://ms-despacho
+          predicates:
+            - Path=/api/despachos
+
+        - id: ms-notificaciones-route     #10
+          uri: lb://ms-notificaciones
+          predicates:
+            - Path=/api/notificaciones
       # ... repite para tus 10 microservicios
 
       default-filters:
