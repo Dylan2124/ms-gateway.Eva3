@@ -11,71 +11,64 @@ spring:
               - "http://localhost:3000"      # Frontend React
               - "http://localhost:4200"      # Frontend Angular
             allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
+              - GET, POST, PUT, DELETE, OPTIONS
             allowedHeaders: "*"
             allow-credentials: true
             max-age: 3600
+
       # Configuración de rutas de los microservicios
       routes:
-        - id: ms-usuarios-route            # Nombre único 1
+        - id: ms-usuarios-route           # Nombre único 1
           uri: lb://ms-usuarios           # Destino dinámico (Eureka)
           predicates:
-            - Path=/api/usuario          # Ruta de controllers del microservicio
+            - Path=/api/usuario/** # Ruta de controllers del microservicio
 
         - id: ms-catalogo-route           #2
           uri: lb://ms-catalogo
           predicates:
-            - Path=/api/producto
+            - Path=/api/producto/**
 
         - id: ms-inventario-route         #3
           uri: lb://ms-inventario
           predicates:
-            - Path=/api/movimientos
-            - Path=/api/stock
+            - Path=/api/movimientos/**, /api/stock/**
 
         - id: ms-carrito-route            #4
           uri: lb://ms-carrito
           predicates:
-            - Path=/api/carrito
+            - Path=/api/carrito/**
 
-        - id: ms-compatibilidad-route      #5
+        - id: ms-compatibilidad-route     #5
           uri: lb://ms-compatibilidad
           predicates:
-            - Path=/api/compatibilidad
+            - Path=/api/compatibilidad/**
 
-        - id: ms-pedidos-route             #6
+        - id: ms-pedidos-route            #6
           uri: lb://ms-pedidos
           predicates:
-            - Path=/api/pedidos
+            - Path=/api/pedidos/**
 
-        - id: ms-ensamblaje-route          #7
-          uri: lb://ms-ensamblaje
+        - id: ms-ensamblajes-route        #7
+          uri: lb://ms-ensamblajes
           predicates:
-            - Path=/api/ensamblajes
-            - Path=/api/fases
+            - Path=/api/ensamblajes/**, /api/fases/**
 
         - id: ms-pagos-route              #8
           uri: lb://ms-pagos
           predicates:
-            - Path=/api/pagos
+            - Path=/api/pagos/**
 
-        - id: ms-despacho-route           #9
-          uri: lb://ms-despacho
+        - id: ms-despachos-route          #9
+          uri: lb://ms-despachos
           predicates:
-            - Path=/api/despachos
+            - Path=/api/despachos/**
 
         - id: ms-notificaciones-route     #10
           uri: lb://ms-notificaciones
           predicates:
-            - Path=/api/notificaciones
-      # ... repite para tus 10 microservicios
+            - Path=/api/notificaciones/**
 
-      default-filters:
-        - StripPrefix=1
+      # ... repite para tus 10 microservicios (¡Ya están los 10 listos y sin el StripPrefix que daba error!)
 
 eureka:
   client:
@@ -89,4 +82,3 @@ eureka:
 
 server:
   port: 8080
-
