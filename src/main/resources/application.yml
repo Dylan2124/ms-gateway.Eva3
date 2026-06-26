@@ -23,7 +23,7 @@ spring:
         - id: ms-usuarios-route           # Nombre único 1
           uri: lb://ms-usuarios           # Destino dinámico (Eureka)
           predicates:
-            - Path=/api/usuario/** # Ruta de controllers del microservicio
+            - Path=/api/usuarios/** # Ruta de controllers del microservicio
 
         - id: ms-catalogo-route           #2
           uri: lb://ms-catalogo
@@ -53,7 +53,7 @@ spring:
         - id: ms-ensamblajes-route        #7
           uri: lb://ms-ensamblajes
           predicates:
-            - Path=/api/ensamblajes/**, /api/fases/**
+            - Path=/api/ensamblajes/**,/api/fases/**
 
         - id: ms-pagos-route              #8
           uri: lb://ms-pagos
