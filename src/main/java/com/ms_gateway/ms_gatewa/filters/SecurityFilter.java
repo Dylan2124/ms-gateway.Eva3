@@ -15,7 +15,6 @@ public class SecurityFilter implements GlobalFilter {
         // 0. Obtener la ruta exacta de la petición
         String path = exchange.getRequest().getURI().getPath();
 
-        // 💡 1. EXCEPCIÓN PARA SWAGGER: Si la ruta es de documentación, la dejamos pasar sin pedir token
         if (path.contains("/swagger-ui") || path.contains("/v3/api-docs")) {
             return chain.filter(exchange);
         }
