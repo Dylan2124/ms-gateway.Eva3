@@ -2,6 +2,8 @@ spring:
   application:
     name: ms-gateway
   cloud:
+    compatibility-verifier:
+      enabled: false #Para la compatibilidad con Spring Cloud Gateway y Spring Boot 3.x
     gateway:
       # Configuración de CORS
       globalcors:
@@ -67,8 +69,6 @@ spring:
           uri: lb://ms-notificaciones
           predicates:
             - Path=/api/notificaciones/**
-
-      # ... repite para tus 10 microservicios (¡Ya están los 10 listos y sin el StripPrefix que daba error!)
 
 eureka:
   client:

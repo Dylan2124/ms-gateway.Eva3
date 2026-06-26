@@ -12,31 +12,33 @@ public class SecurityFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        // 1. Extrae el token de la cabecera
+        // 0. Obtener la ruta exacta de la petición
+        String path = exchange.getRequest().getURI().getPath();
+
+        // 💡 1. EXCEPCIÓN PARA SWAGGER: Si la ruta es de documentación, la dejamos pasar sin pedir token
+        if (path.contains("/swagger-ui") || path.contains("/v3/api-docs")) {
+            return chain.filter(exchange);
+        }
+
+        // 2. Extrae el token de la cabecera (para las peticiones reales a tu API)
         String token = exchange.getRequest().getHeaders().getFirst("Autorizado");
 
-        // 2. Verifica si existe el token
+        // 3. Verifica si existe el token
         if (token == null || token.isEmpty()) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
-        // 3. Valida el token (aquí iría tu lógica JWT)
+        // 4. Valida el token (aquí iría tu lógica JWT)
         if (!isValidToken(token)) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
-        // 4. Si es válido, deja pasar
+        // 5. Si es válido, deja pasar
         return chain.filter(exchange);
     }
 
     private boolean isValidToken(String token) {
-        // TODO: Implementa validación JWT aquí
-        // Opciones:
-        //Llamar a un servicio de validación
-        //Usar una librería JWT (io.jsonwebtoken:jjwt)
-        //Validar firma y expiración
-        return true; // Placeholder
+        return true;
     }
-
 }
 
